@@ -1,0 +1,155 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              08/17/2024 19:35:14 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Program Files\keil5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\L
+                    -istings\main.lst) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "Delay.h"
+   3          #include "Timer0.h"
+   4          
+   5          sbit Buzzer=P2^5;
+   6          
+   7          #define SPEED  500 
+   8          #define P       0
+   9          #define L1              1
+  10          #define L1_     2
+  11          #define L2              3
+  12          #define L2_     4
+  13          #define L3      5
+  14          #define L4      6
+  15          #define L4_     7
+  16          #define L5      8
+  17          #define L5_     9
+  18          #define L6      10
+  19          #define L6_     11
+  20          #define L7      12
+  21          #define M1      13
+  22          #define M1_     14
+  23          #define M2      15
+  24          #define M2_     16
+  25          #define M3      17
+  26          #define M4      18
+  27          #define M4_     19
+  28          #define M5      20
+  29          #define M5_     21
+  30          #define M6      22
+  31          #define M6_     23
+  32          #define M7      24
+  33          #define H1      25
+  34          #define H1_     26
+  35          #define H2      27
+  36          #define H2_     28
+  37          #define H3      29
+  38          #define H4      30
+  39          #define H4_     31
+  40          #define H5      32
+  41          #define H5_     33
+  42          #define H6      34
+  43          #define H6_     35
+  44          #define H7      36
+  45          
+  46          
+  47          unsigned char KeyNum;
+  48          
+  49          unsigned int FreqTable[]={0,
+  50                  63777,63872,63967,64053,64139,64214,64290,64359,64424,64488,64546,64606,
+  51                  64654,64703,64750,64794,64836,64875,64912,64947,64980,65012,65041,65069,
+  52                  65094,65119,65142,65165,65186,65205,65223,65241,65258,65273,65288,65302
+  53          };
+  54          unsigned char code Music[]=
+C51 COMPILER V9.60.7.0   MAIN                                                              08/17/2024 19:35:14 PAGE 2   
+
+  55          {
+  56                  0,4,
+  57                  0,4,
+  58                  0,4,
+  59                  M6,2,
+  60                  M7,2,
+  61                  
+  62                  H1,6,
+  63                  M7,2,
+  64                  H1,4,
+  65                  H3,4,
+  66                  
+  67                  M7,12,
+  68                  M3,2,
+  69                  M3,2,
+  70                  
+  71                  M6,6,
+  72                  M5,2,
+  73                  M6,4,
+  74                  H1,4,
+  75                  
+  76                  M5,12,
+  77                  M3,4,
+  78                  
+  79                  M4,6,
+  80                  M3,2,
+  81                  M4,4,
+  82                  H1,4,
+  83                  
+  84                  M3,8,
+  85                  0,2,
+  86                  H1,2,
+  87                  H1,2,
+  88                  H1,2,
+  89                  
+  90                  M7,6,
+  91                  M4_,2,
+  92                  M4,4,
+  93                  M7,4,
+  94                          
+  95                  0xFF
+  96          };
+  97          unsigned int FreqSelect,MusicSelect;
+  98          
+  99          void main()
+ 100          {
+ 101   1              Timer0_Init();
+ 102   1              while(1)
+ 103   1              {
+ 104   2                      if(Music[MusicSelect]!=0xFF)
+ 105   2                      {
+ 106   3                              FreqSelect=Music[MusicSelect];
+ 107   3                              MusicSelect++;
+ 108   3                              Delay(SPEED/4*Music[MusicSelect]);
+ 109   3                              MusicSelect++;
+ 110   3                              TR0=0;
+ 111   3                              Delay(5);
+ 112   3                              TR0=1;
+ 113   3                      }
+ 114   2                      else
+ 115   2                      {
+ 116   3                              TR0=0;
+C51 COMPILER V9.60.7.0   MAIN                                                              08/17/2024 19:35:14 PAGE 3   
+
+ 117   3                              while(1);
+ 118   3                      }
+ 119   2              }
+ 120   1      }
+ 121          
+ 122          void Timer0_Routine() interrupt 1
+ 123          {
+ 124   1              TL0 = FreqTable[FreqSelect]%256;                                //设置定时初始值
+ 125   1              TH0 = FreqTable[FreqSelect]/256;                                //设置定时初始值
+ 126   1              Buzzer=!Buzzer;//1ms翻转一次，周期2ms，产生了500hz的频率
+ 127   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    119    ----
+   CONSTANT SIZE    =     63    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     79    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,84 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              08/25/2024 14:42:38 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Program Files\keil5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\L
+                    -istings\main.lst) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "Delay.h"
+   3          #include "LCD1602.h"
+   4          #include "AT24C02.h"
+   5          #include "Delay.h"
+   6          #include "Key.h"
+   7          
+   8          unsigned char KeyNum;
+   9          unsigned int Num;
+  10          
+  11          void main()
+  12          {
+  13   1              LCD_Init();
+  14   1              LCD_ShowNum(1,1,Num,5);
+  15   1      //      AT24C02_WriteByte(1,147);
+  16   1      //      Delay(5);
+  17   1      //      AT24C02_WriteByte(2,147);
+  18   1      //      Delay(5);
+  19   1      //      AT24C02_WriteByte(3,147);
+  20   1      //      Delay(5);
+  21   1      //      Data=AT24C02_ReadByte(1);
+  22   1      //      LCD_ShowNum(2,1,Data,3);
+  23   1      
+  24   1              while(1)
+  25   1              {
+  26   2                      KeyNum=key();
+*** WARNING C206 IN LINE 26 OF main.c: 'key': missing function-prototype
+  27   2                      if(KeyNum==1)
+  28   2                      {
+  29   3                              Num++;
+  30   3                              LCD_ShowNum(1,1,Num,5);
+  31   3                      }
+  32   2                      if(KeyNum==2)
+  33   2                      {
+  34   3                              Num--;
+  35   3                              LCD_ShowNum(1,1,Num,5);
+  36   3                      }
+  37   2                      if(KeyNum==3)
+  38   2                      {
+  39   3                              AT24C02_WriteByte(0,Num%256);
+  40   3                              Delay(5);
+  41   3                              AT24C02_WriteByte(1,Num/256);
+  42   3                              Delay(5);
+  43   3                              LCD_ShowString(2,1,"Write OK");
+  44   3                              Delay(1000);
+  45   3                              LCD_ShowString(2,1,"        ");
+  46   3                      }
+  47   2                      if(KeyNum==4)
+  48   2                      {
+  49   3                              Num=AT24C02_ReadByte(0);
+  50   3                              Num|=AT24C02_ReadByte(1)<<8;
+  51   3                              LCD_ShowNum(1,1,Num,5);
+  52   3                              LCD_ShowString(2,1,"Read OK ");
+  53   3                              Delay(1000);
+C51 COMPILER V9.60.7.0   MAIN                                                              08/25/2024 14:42:38 PAGE 2   
+
+  54   3                              LCD_ShowString(2,1,"        ");
+  55   3                      }
+  56   2              }
+  57   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    223    ----
+   CONSTANT SIZE    =     27    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      3    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)
